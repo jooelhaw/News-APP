@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.newsapp.NewsApp.api.model.ApiManager
 import com.example.newsapp.NewsApp.api.model.SourceResponse
+import com.example.newsapp.NewsApp.api.model.SourcesItem
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.google.gson.Gson
 import retrofit2.Call
@@ -56,7 +57,7 @@ class NewsFragment: Fragment() {
             ) {
                 viewBinding.progressBar.isVisible = false
                 if (response.isSuccessful){
-                    response.body()
+                    bindTabs(response.body()?.sources)
                 }else{
                     val errorBodyJsonString = response.errorBody()?.string()
                     val response = Gson().fromJson(errorBodyJsonString,SourceResponse::class.java)
@@ -75,6 +76,16 @@ class NewsFragment: Fragment() {
 
             }
         })
+    }
+
+    private fun bindTabs(sources: List<SourcesItem?>?) {
+        if (sources==null)return
+        sources?.forEach{sourcesItem ->
+            val tab = viewBinding.tabLayout.newTab()
+            tab.text = sourcesItem?.name
+            viewBinding.tabLayout.addTab(tab)
+        }
+
     }
 
 

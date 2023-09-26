@@ -6,7 +6,7 @@ import android.content.DialogInterface
 import androidx.fragment.app.Fragment
 
 fun Fragment.showMessage(
-    message: Any,
+    message: String,
     posActionName:String?= null,
     posAction: DialogInterface.OnClickListener? = null,
     negActionName:String?= null,
