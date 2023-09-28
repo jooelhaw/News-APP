@@ -15,10 +15,10 @@
         android:theme="@style/Theme.NewsAPP"
         tools:targetApi="31">
         <activity
-            android:name=".NewsApp.App.HomeActivity"
+            android:name=".NewsApp.ui.Home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsApp.App.Splash"
+            android:name=".NewsApp.ui.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewsApp.App.NewsActivity"
+            android:name=".NewsApp.ui.News.NewsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
