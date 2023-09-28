@@ -1,5 +1,6 @@
 package com.example.newsapp.NewsApp.ui.News
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import com.example.newsapp.NewsApp.api.model.ApiManager
 import com.example.newsapp.NewsApp.api.model.newsResponse.NewsResponse
 import com.example.newsapp.NewsApp.api.model.sourcesResponse.SourceResponse
 import com.example.newsapp.NewsApp.api.model.sourcesResponse.Source
+import com.example.newsapp.NewsApp.ui.Home.HomeActivity
+import com.example.newsapp.NewsApp.ui.Splash
 import com.example.newsapp.NewsApp.ui.showMessage
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.google.android.material.tabs.TabLayout
@@ -19,7 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsFragment: Fragment() {
+class NewsFragment(var category: String): Fragment() {
     lateinit var viewBinding: FragmentNewsBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,10 +45,8 @@ class NewsFragment: Fragment() {
     }
 
     private fun getNewsSources() {
-      //  val response = ApiManager.getApis().getSources().execute()
         viewBinding.progressBar.isVisible = true
-      //  viewBinding.progressBar.visibility = View.VISIBLE
-        ApiManager.getApis().getSources().enqueue(object : Callback<SourceResponse>{
+        ApiManager.getApis().getSources(category = category).enqueue(object : Callback<SourceResponse>{
             override fun onFailure(call: Call<SourceResponse>, t: Throwable) {
                 viewBinding.progressBar.isVisible = false
                 handleError(t) {
@@ -86,6 +87,9 @@ class NewsFragment: Fragment() {
             negActionName = "Cancel"
         ) { dialogInterface, i ->
             dialogInterface.dismiss()
+            val intent = Intent(context,Splash::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
     }
     private fun handleError(message: String?,onClick: OnTryAgainClickListener){
@@ -99,6 +103,9 @@ class NewsFragment: Fragment() {
             negActionName = "Cancel"
         ) { dialogInterface, i ->
             dialogInterface.dismiss()
+            val intent = Intent(context,Splash::class.java)
+            startActivity(intent)
+            activity?.finish()
         }
     }
 

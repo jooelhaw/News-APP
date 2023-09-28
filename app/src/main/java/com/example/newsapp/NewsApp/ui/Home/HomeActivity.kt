@@ -13,10 +13,31 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
+        val intent = Intent(this,NewsActivity::class.java)
         setContentView(viewBinding.root)
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, NewsActivity::class.java)
+        viewBinding.sports.setOnClickListener {
+            intent.putExtra("CATEGORY","sports")
             startActivity(intent)
-        },2000)
+        }
+        viewBinding.business.setOnClickListener {
+            intent.putExtra("CATEGORY","business")
+            startActivity(intent)
+        }
+        viewBinding.health.setOnClickListener {
+            intent.putExtra("CATEGORY","health")
+            startActivity(intent)
+        }
+        viewBinding.environment.setOnClickListener {
+            intent.putExtra("CATEGORY","entertainment")
+            startActivity(intent)
+        }
+        viewBinding.technology.setOnClickListener {
+            intent.putExtra("CATEGORY","technology")
+            startActivity(intent)
+        }
+        viewBinding.science.setOnClickListener {
+            intent.putExtra("CATEGORY","science")
+            startActivity(intent)
+        }
     }
 }

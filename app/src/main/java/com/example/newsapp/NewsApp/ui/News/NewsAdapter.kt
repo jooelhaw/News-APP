@@ -1,7 +1,6 @@
 package com.example.newsapp.NewsApp.ui.News
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -27,7 +26,7 @@ class NewsAdapter(var newsList: List<News?>? = null) : Adapter<NewsAdapter.NewsV
         holder.itemBinding.title.text = news?.title
         holder.itemBinding.description.text = news?.description
         Glide.with(holder.itemView).load(news?.urlToImage)
-            .placeholder(R.drawable.pattern)
+            .placeholder(R.drawable.logo)
             .into(holder.itemBinding.newsImg)
 
     }

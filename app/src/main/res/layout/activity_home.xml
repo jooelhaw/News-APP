@@ -37,15 +37,15 @@
         android:layout_height="wrap_content"
         android:src="@drawable/sports"
         app:layout_constraintBottom_toTopOf="@id/health"
-        app:layout_constraintEnd_toStartOf="@id/politics"
+        app:layout_constraintEnd_toStartOf="@id/technology"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_instruction" />
 
     <ImageView
-        android:id="@+id/politics"
+        android:id="@+id/technology"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/politics"
+        android:src="@drawable/techno"
         app:layout_constraintBottom_toTopOf="@id/business"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sports"
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@id/science"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/health"
-        app:layout_constraintTop_toBottomOf="@id/politics" />
+        app:layout_constraintTop_toBottomOf="@id/technology" />
 
     <ImageView
         android:id="@+id/environment"
