@@ -1,11 +1,11 @@
-package com.example.newsapp.NewsApp.ui
+package com.example.newsapp.newsApp.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.example.newsapp.NewsApp.ui.Home.HomeActivity
+import com.example.newsapp.newsApp.ui.Home.HomeActivity
 import com.example.newsapp.databinding.ActivitySplashBinding
 
 class Splash : AppCompatActivity() {

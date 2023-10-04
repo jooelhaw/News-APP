@@ -1,11 +1,9 @@
-package com.example.newsapp.NewsApp.ui.Home
+package com.example.newsapp.newsApp.ui.Home
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import com.example.newsapp.NewsApp.ui.News.NewsActivity
+import com.example.newsapp.newsApp.ui.news.NewsActivity
 import com.example.newsapp.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {

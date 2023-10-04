@@ -1,4 +1,4 @@
-package com.example.newsapp.NewsApp.ui
+package com.example.newsapp.newsApp.ui
 
 import android.app.Activity
 import android.app.AlertDialog

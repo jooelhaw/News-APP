@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
-    android:elevation="10dp"
-    app:cardCornerRadius="12dp"
-    android:orientation="vertical">
-    <LinearLayout
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="news"
+            type="com.example.newsapp.newsApp.api.model.newsResponse.News" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_margin="10dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="12dp"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/news_img"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Title"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:lines="5"
-            android:maxLines="5"
-            android:text="Description"
-            android:textSize="16sp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/news_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:url="@{news.urlToImage}"
+                app:placeholder="@{@drawable/logo}"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@{news.title}"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:text="Title"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:lines="5"
+                android:maxLines="5"
+                android:text="@{news.description}"
+                tools:text= "Description"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
