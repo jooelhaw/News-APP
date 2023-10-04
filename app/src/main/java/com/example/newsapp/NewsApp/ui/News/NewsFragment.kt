@@ -7,23 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.newsapp.NewsApp.api.model.ApiManager
-import com.example.newsapp.NewsApp.api.model.newsResponse.NewsResponse
-import com.example.newsapp.NewsApp.api.model.sourcesResponse.SourceResponse
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.NewsApp.api.model.sourcesResponse.Source
-import com.example.newsapp.NewsApp.ui.Home.HomeActivity
+import com.example.newsapp.NewsApp.ui.OnTryAgainClickListener
 import com.example.newsapp.NewsApp.ui.Splash
 import com.example.newsapp.NewsApp.ui.showMessage
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class NewsFragment(var category: String): Fragment() {
     lateinit var viewBinding: FragmentNewsBinding
+    lateinit var viewModel: NewsViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,7 +36,24 @@ class NewsFragment(var category: String): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        getNewsSources()
+        initObservers()
+        viewModel.getNewsSources(category)
+    }
+
+    private fun initObservers() {
+        viewModel.shouldShowLoading.observe(viewLifecycleOwner,object : Observer<Boolean>{
+            override fun onChanged(isVisible: Boolean){
+                viewBinding.progressBar.isVisible = isVisible
+            }
+        })
+        viewModel.sourceList.observe(viewLifecycleOwner){sources->
+            bindTabs(sources)
+        }
+        viewModel.newsList.observe(viewLifecycleOwner){
+            adapter.bindNews(it)
+
+        }
+
     }
 
     val adapter = NewsAdapter()
@@ -44,37 +61,7 @@ class NewsFragment(var category: String): Fragment() {
         viewBinding.recyclerView.adapter = adapter
     }
 
-    private fun getNewsSources() {
-        viewBinding.progressBar.isVisible = true
-        ApiManager.getApis().getSources(category = category).enqueue(object : Callback<SourceResponse>{
-            override fun onFailure(call: Call<SourceResponse>, t: Throwable) {
-                viewBinding.progressBar.isVisible = false
-                handleError(t) {
-                    getNewsSources()
-                }
-            }
 
-            override fun onResponse(
-                call: Call<SourceResponse>,
-                response: Response<SourceResponse>
-            ) {
-                viewBinding.progressBar.isVisible = false
-                if (response.isSuccessful){
-                    bindTabs(response.body()?.sources)
-                }else{
-                    val errorBodyJsonString = response.errorBody()?.string()
-                    val response = Gson().fromJson(errorBodyJsonString, SourceResponse::class.java)
-                    handleError(response.message){
-                        getNewsSources()
-                    }
-                }
-
-            }
-        })
-    }
-    fun interface OnTryAgainClickListener{
-        fun onTryAgainClick()
-    }
 
     private fun handleError(t: Throwable, onClick: OnTryAgainClickListener) {
         showMessage(
@@ -121,7 +108,7 @@ class NewsFragment(var category: String): Fragment() {
             object : OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     val source = tab?.tag as Source
-                    getNews(source.id)
+                    viewModel.getNews(source.id)
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -129,39 +116,10 @@ class NewsFragment(var category: String): Fragment() {
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     val source = tab?.tag as Source
-                    getNews(source.id)
+                    viewModel.getNews(source.id)
                 }
-
             }
         )
         viewBinding.tabLayout.getTabAt(0)?.select()
-
     }
-
-    private fun getNews(id: String?) {
-        viewBinding.progressBar.isVisible = true
-        ApiManager.getApis().getNews(Sources = id?:"").enqueue(object : Callback<NewsResponse>{
-            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                viewBinding.progressBar.isVisible = false
-                handleError(t) {
-                    getNews(id)
-                }
-            }
-
-            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
-                viewBinding.progressBar.isVisible = false
-                if (response.isSuccessful){
-                    adapter.bindNews(response.body()?.articles)
-                    return
-                }
-                val responseJsonError = response.errorBody()?.string()
-                val errorResponse = Gson().fromJson(responseJsonError,NewsResponse::class.java)
-                handleError(errorResponse.message) {
-                    getNews(id)
-                }
-            }
-        })
-    }
-
-
 }
