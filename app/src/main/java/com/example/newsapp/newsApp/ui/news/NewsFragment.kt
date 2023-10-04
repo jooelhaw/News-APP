@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 class NewsFragment(var category: String): Fragment() {
     lateinit var viewBinding: FragmentNewsBinding
     lateinit var viewModel: NewsViewModel
+    // try to commit successfully
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
