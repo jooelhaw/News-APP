@@ -3,10 +3,14 @@ package com.example.newsapp.newsApp.ui.news
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.newsapp.R
 import com.example.newsapp.newsApp.api.model.sourcesResponse.Source
 import com.example.newsapp.newsApp.ui.Splash
 import com.example.newsapp.newsApp.ui.ViewError
@@ -18,12 +22,14 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 class NewsFragment(var category: String): Fragment() {
     lateinit var viewBinding: FragmentNewsBinding
     lateinit var viewModel: NewsViewModel
+
     // try to commit
     // try to send commit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,6 +44,10 @@ class NewsFragment(var category: String): Fragment() {
         initView()
         initObservers()
         viewModel.getNewsSources(category)
+//        viewBinding.sideMenuImg.setOnClickListener {
+//            toolbar.inflateMenu(R.menu.side_menu)
+//
+//        }
     }
 
     private fun initObservers() {

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">News APP</string>
     <string name="instruction">Pick your category\nof interest</string>
+    <string name="categories">Categories</string>
+    <string name="settings">Settings</string>
 </resources>

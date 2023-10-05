@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.NewsAPP" parent="Base.Theme.NewsAPP" />
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@drawable/tab_shape</item>
+    </style>
 </resources>
