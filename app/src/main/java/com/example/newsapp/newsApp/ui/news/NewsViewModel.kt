@@ -53,16 +53,16 @@ class NewsViewModel(): ViewModel() {
             }
         })
     }
-    fun getNews(id: String?) {
+    fun getNews(id: String?, pageSize: Int, page: Int) {
         shouldShowLoading.postValue(true)
-        ApiManager.getApis().getNews(Sources = id?:"").enqueue(object : Callback<NewsResponse>{
+        ApiManager.getApis().getNews(Sources = id?:"", pageSize = pageSize,page= page).enqueue(object : Callback<NewsResponse>{
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
                 shouldShowLoading.postValue(false)
                 errorLiveData.postValue(
                     ViewError(
                         throwable = t
                     ){
-                        getNews(id)
+                        getNews(id,pageSize, page)
                     }
                 )
             }
@@ -79,7 +79,7 @@ class NewsViewModel(): ViewModel() {
                     ViewError(
                         message = errorResponse.message
                     ){
-                        getNews(id)
+                        getNews(id,pageSize, page)
                     }
                 )
             }

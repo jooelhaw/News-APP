@@ -16,7 +16,9 @@ interface WebServices {
 
     @GET("/v2/everything")
     fun getNews(
-        @Query("apiKey")Key: String = ApiConstants.apiKey,
-        @Query("sources")Sources: String
+        @Query("apiKey") Key: String = ApiConstants.apiKey,
+        @Query("sources") Sources: String,
+        @Query("pageSize") pageSize: Int,
+        @Query("page") page: Int
     ): Call<NewsResponse>
 }

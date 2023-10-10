@@ -10,18 +10,25 @@ import android.view.ViewGroup
 import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
 import com.example.newsapp.newsApp.api.model.sourcesResponse.Source
 import com.example.newsapp.newsApp.ui.Splash
 import com.example.newsapp.newsApp.ui.ViewError
 import com.example.newsapp.newsApp.ui.showMessage
 import com.example.newsapp.databinding.FragmentNewsBinding
+import com.example.newsapp.newsApp.api.model.newsResponse.News
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
 class NewsFragment(var category: String): Fragment() {
     lateinit var viewBinding: FragmentNewsBinding
     lateinit var viewModel: NewsViewModel
+    var sourceObj: Source? = null
+    var isLoading = false
+    var pageSize = 20
+    var page = 1
 
     // try to commit
     // try to send commit
@@ -54,13 +61,20 @@ class NewsFragment(var category: String): Fragment() {
         viewModel.sourceList.observe(viewLifecycleOwner){sources->
             bindTabs(sources)
         }
+
         viewModel.newsList.observe(viewLifecycleOwner){
             adapter.bindNews(it)
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner){
             handleError(it)
         }
+        getNews()
 
+    }
+
+    private fun getNews() {
+        viewModel.getNews(sourceObj?.id,pageSize,page)
+        isLoading = false
     }
 
     val adapter = NewsAdapter()
@@ -68,6 +82,27 @@ class NewsFragment(var category: String): Fragment() {
         viewBinding.vm = viewModel
         viewBinding.lifecycleOwner = this
         viewBinding.recyclerView.adapter = adapter
+        viewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                var layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                var lastVisibleItemCount = layoutManager.findLastVisibleItemPosition()
+                var totalItemCount = layoutManager.itemCount
+                var visibleThreshold = 3
+                if (!isLoading&& totalItemCount - lastVisibleItemCount <= visibleThreshold){
+                    isLoading = true
+                    page++
+
+                }
+            }
+        })
+        adapter.onViewClickListener =
+            NewsAdapter.OnViewClickListener { news ->
+                val intent = Intent(requireContext(),NewDetailsActivity::class.java)
+                intent.putExtra("news",news)
+                startActivity(intent)
+            }
+
     }
 
 
@@ -102,7 +137,8 @@ class NewsFragment(var category: String): Fragment() {
             object : OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     val source = tab?.tag as Source
-                    viewModel.getNews(source.id)
+                    sourceObj = source
+                    viewModel.getNews(source.id,pageSize,page)
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -110,7 +146,8 @@ class NewsFragment(var category: String): Fragment() {
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     val source = tab?.tag as Source
-                    viewModel.getNews(source.id)
+                    sourceObj = source
+                    viewModel.getNews(source.id,pageSize, page)
                 }
             }
         )
